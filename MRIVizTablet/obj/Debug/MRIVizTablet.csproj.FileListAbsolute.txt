@@ -1,0 +1,14 @@
+c:\users\marinho\documents\visual studio 2012\Projects\MRIVizTablet\MRIVizTablet\bin\Debug\MRIVizTablet.exe.config
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\bin\Debug\MRIVizTablet.exe
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\bin\Debug\MRIVizTablet.pdb
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\bin\Debug\GroupLab.iNetwork.dll
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet.csprojResolveAssemblyReference.cache
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MainWindow.baml
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MainWindow.g.cs
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\App.g.cs
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet_MarkupCompile.cache
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet.g.resources
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet.Properties.Resources.resources
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet.csproj.GenerateResource.Cache
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet.exe
+C:\Users\Marinho\Documents\Visual Studio 2012\Projects\MRIVizTablet\MRIVizTablet\obj\Debug\MRIVizTablet.pdb
