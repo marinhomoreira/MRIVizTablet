@@ -25,103 +25,65 @@ namespace MRIVizTablet
     {
         public MainWindow()
         {
+            InitializeConnection();
             InitializeComponent();
-            InitializeServer();
-            this.Closing += new System.ComponentModel.CancelEventHandler(OnClosing);
         }
 
-        private Server _server;
-        private List<Connection> _clients;
+
+        // iNetworking initialization
+        private Connection _connection;
+        // Tablet ipAddress
+        //private string _ipAddress = "192.168.0.112";
+        private string _ipAddress = "136.159.7.53";
+        private int _port = 12345 ;
+
 
         #region iNetwork Methods
 
-        public void InitializeServer()
+        private void InitializeConnection()
         {
-            this._clients = new List<Connection>();
+            // connect to the server
+            this._connection = new Connection(this._ipAddress, this._port);
+            this._connection.Connected += new ConnectionEventHandler(OnConnected);
+            this._connection.Start();
 
-            // Create a new server, add name and port number
-            this._server = new Server("ServerName", 12345);
-            this._server.IsDiscoverable = true;
-            this._server.Connection += new ConnectionEventHandler(OnServerConnection);
-
-            this._server.Start();
-
-            // Display the server info on the label
-            this.NetInfo.Content = "IP: " + this._server.Configuration.IPAddress.ToString() + ", Port: " + this._server.Configuration.Port.ToString();
+            this._connection.SendMessage(new Message("ae"));
         }
 
-        private void OnServerConnection(object sender, ConnectionEventArgs e)
+        void OnConnected(object sender, ConnectionEventArgs e)
         {
-
-            if (e.ConnectionEvent == ConnectionEvents.Connect)
-            {
-                // new client connected
-                lock (this._clients)
-                {
-                    if (!(this._clients.Contains(e.Connection)))
-                    {
-                        this._clients.Add(e.Connection);
-                        e.Connection.MessageReceived += new ConnectionMessageEventHandler(OnMessageReceived);
-
-                        this.Dispatcher.Invoke(
-                            new Action(
-                                delegate()
-                                {
-                                    //this.clientList.Items.Add(e.Connection.ToString());
-                                }));
-                    }
-                }
-            }
-            else if (e.ConnectionEvent == ConnectionEvents.Disconnect)
-            {
-                // client disconnected
-                lock (this._clients)
-                {
-                    if (this._clients.Contains(e.Connection))
-                    {
-                        this._clients.Remove(e.Connection);
-                        e.Connection.MessageReceived -= new ConnectionMessageEventHandler(OnMessageReceived);
-
-                        this.Dispatcher.Invoke(
-                            new Action(
-                                delegate()
-                                {
-                                    //this.clientList.Items.Remove(e.Connection.ToString());
-                                }));
-                    }
-                }
-            }
+            this._connection.MessageReceived += new ConnectionMessageEventHandler(OnMessageReceived);
         }
 
         private void OnMessageReceived(object sender, Message msg)
         {
-            this.Dispatcher.Invoke(
-                new Action(
-                    delegate()
+            try
+            {
+                if (msg != null)
+                {
+                    switch (msg.Name)
                     {
-                        if (msg != null)
-                        {
-                            this.messages.Text += msg.Name + "\n";
-                            switch (msg.Name)
-                            {
-                                default:
-                                    // don't do anything
-                                    break;
-                                // add cases with the message names
-                                case "ChangeImg":
-                                    int index = msg.GetIntField("index");
-                                    setImageOnDisplay(index);
-                                    break;
-                            }
-                        }
-                    }));
+                        default:
+                            // don't do anything
+                            break;
+                        case "ChangeImg":
+                            int index = msg.GetIntField("index");
+                            setImageOnDisplay(index);
+                            Console.WriteLine(msg.ToString());
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+            }
+
         }
 
+
         #endregion
-
-
-
-
+      
         #region Display-related functions
         void setImageOnDisplay(int imageIndex)
         {
@@ -135,14 +97,7 @@ namespace MRIVizTablet
 
         #endregion
 
-        void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //Ensure that the server terminates when the window is closed.
-            if (this._server != null && this._server.IsRunning)
-            {
-                this._server.Stop();
-            }
-        }
+
 
     }
 }

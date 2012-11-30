@@ -4,9 +4,5 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Image Name="image" HorizontalAlignment="Left" VerticalAlignment="Top" Height="350" Width="350" />
-
-        <TextBox Height="61" HorizontalAlignment="Left" Margin="244,85,0,0" Name="messages" VerticalAlignment="Top" Width="247" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
-        <Label Content="IP Address and Port" Height="36" HorizontalAlignment="Left" Margin="26,14,0,0" Name="NetInfo" VerticalAlignment="Top" Width="440" FontWeight="Bold" FontSize="20" />
-        <Label Content="Messages" FontSize="14" FontWeight="Bold" Height="27" HorizontalAlignment="Right" Margin="0,58,153,0" Name="messagesLabel" VerticalAlignment="Top" Width="106" />
     </Grid>
 </Window>
