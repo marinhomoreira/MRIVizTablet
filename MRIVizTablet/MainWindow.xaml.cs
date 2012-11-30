@@ -33,9 +33,11 @@ namespace MRIVizTablet
         // iNetworking initialization
         private Connection _connection;
         // Tablet ipAddress
-        //private string _ipAddress = "192.168.0.112";
-        private string _ipAddress = "136.159.7.53";
-        private int _port = 12345 ;
+        private string _ipAddress = "192.168.0.112";
+        //private string _ipAddress = "136.159.7.53";
+        private int _port = 12345;
+
+        private bool paused = false;
 
 
         #region iNetwork Methods
@@ -69,7 +71,7 @@ namespace MRIVizTablet
                         case "ChangeImg":
                             int index = msg.GetIntField("index");
                             setImageOnDisplay(index);
-                            Console.WriteLine(msg.ToString());
+                            Console.WriteLine("Index Received: "+index);
                             break;
                     }
                 }
@@ -87,15 +89,37 @@ namespace MRIVizTablet
         #region Display-related functions
         void setImageOnDisplay(int imageIndex)
         {
-            String imgUri = "MRIImages/IM-0001-0" + imageIndex + ".jpg";
+            if (!paused)
+            {
+                String imgUri = "MRIImages/IM-0001-0" + imageIndex + ".jpg";
 
+                this.Dispatcher.Invoke(new Action(delegate()
+                {
+                    image.Source = new BitmapImage(new Uri(imgUri, UriKind.Relative));
+                }));
+            }
+        }
+
+        void changePauseState()
+        {
+            this.paused = this.paused == true ? false : true;
             this.Dispatcher.Invoke(new Action(delegate()
             {
-                image.Source = new BitmapImage(new Uri(imgUri, UriKind.Relative));
+                appStatus.Text = this.paused.ToString();
             }));
         }
 
         #endregion
+
+        private void changeApplicationState(object sender, RoutedEventArgs e)
+        {
+            changePauseState();
+        }
+
+        private void changeAppState(object sender, TouchEventArgs e)
+        {
+            changePauseState();
+        }
 
 
 
