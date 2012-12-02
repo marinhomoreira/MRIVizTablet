@@ -32,9 +32,10 @@ namespace MRIVizTablet
 
         // iNetworking initialization
         private Connection _connection;
-        // Tablet ipAddress
-        private string _ipAddress = "192.168.0.112";
+        // Tablet ipAddress  
+        //private string _ipAddress = "192.168.0.112";
         //private string _ipAddress = "136.159.7.53";
+        private string _ipAddress = "192.168.139.100";
         private int _port = 12345;
 
         private bool paused = false;
@@ -70,7 +71,9 @@ namespace MRIVizTablet
                             break;
                         case "ChangeImg":
                             int index = msg.GetIntField("index");
-                            setImageOnDisplay(index);
+                            int x = msg.GetIntField("x");
+                            int y = msg.GetIntField("y");
+                            setImageOnDisplay(index, x, y);
                             Console.WriteLine("Index Received: "+index);
                             break;
                     }
@@ -87,7 +90,7 @@ namespace MRIVizTablet
         #endregion
       
         #region Display-related functions
-        void setImageOnDisplay(int imageIndex)
+        void setImageOnDisplay(int imageIndex, int x, int y)
         {
             if (!paused)
             {
@@ -96,6 +99,8 @@ namespace MRIVizTablet
                 this.Dispatcher.Invoke(new Action(delegate()
                 {
                     image.Source = new BitmapImage(new Uri(imgUri, UriKind.Relative));
+                    image.SetValue(Canvas.LeftProperty, (double) x);
+                    image.SetValue(Canvas.TopProperty, (double) y);
                 }));
             }
         }
