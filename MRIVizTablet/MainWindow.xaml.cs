@@ -34,8 +34,8 @@ namespace MRIVizTablet
         private Connection _connection;
         // Tablet ipAddress  
         //private string _ipAddress = "192.168.0.112";
-        //private string _ipAddress = "136.159.7.53";
-        private string _ipAddress = "192.168.139.100";
+        private string _ipAddress = "136.159.7.53";
+        //private string _ipAddress = "192.168.139.100";
         private int _port = 12345;
 
         private bool paused = false;
@@ -74,7 +74,7 @@ namespace MRIVizTablet
                             int x = msg.GetIntField("x");
                             int y = msg.GetIntField("y");
                             setImageOnDisplay(index, x, y);
-                            Console.WriteLine("Index Received: "+index);
+                            Console.WriteLine("Index Received: "+index + " X: "+ x + " Y:"+y);
                             break;
                     }
                 }
@@ -90,6 +90,19 @@ namespace MRIVizTablet
         #endregion
       
         #region Display-related functions
+
+        double imgD = 512;
+
+        void setImageSizeByFactor(double f)
+        {
+            this.imgD = this.imgD * f;
+            this.Dispatcher.Invoke(new Action(delegate()
+            {
+                image.Height = this.imgD;
+                image.Width = this.imgD;
+            }));
+        }
+
         void setImageOnDisplay(int imageIndex, int x, int y)
         {
             if (!paused)
@@ -99,11 +112,32 @@ namespace MRIVizTablet
                 this.Dispatcher.Invoke(new Action(delegate()
                 {
                     image.Source = new BitmapImage(new Uri(imgUri, UriKind.Relative));
-                    image.SetValue(Canvas.LeftProperty, (double) x);
-                    image.SetValue(Canvas.TopProperty, (double) y);
+                    double[] c = processCoordinates(x, y);
+                    //image.SetValue(Canvas.LeftProperty, c[0]);
+                    //image.SetValue(Canvas.TopProperty, c[1]);
+                    scroll.ScrollToHorizontalOffset(c[0]);
+                    scroll.ScrollToVerticalOffset(c[1]);
                 }));
             }
         }
+
+        double[] processCoordinates(int x, int y)
+        {
+            double[] coordinates = { 0.0, 0.0 };
+            
+            double tH = 2250;
+            double tW = 3000;
+            // processing X
+            double imgXFactor = this.imgD / tW;
+            coordinates[0] = imgXFactor * (double)x;
+            // processing Y
+            double imgYFactor = this.imgD / tH;
+            coordinates[1] = scroll.ScrollableHeight - (imgYFactor * (double)y);
+            Console.WriteLine(coordinates[0] + " "+coordinates[1] );
+            return coordinates;
+        }
+
+
 
         void changePauseState()
         {
@@ -116,14 +150,14 @@ namespace MRIVizTablet
 
         #endregion
 
-        private void changeApplicationState(object sender, RoutedEventArgs e)
+        private void changeAppState(object sender, TouchEventArgs e)
         {
             changePauseState();
         }
 
-        private void changeAppState(object sender, TouchEventArgs e)
+        private void changeImageSize(object sender, RoutedEventArgs e)
         {
-            changePauseState();
+            setImageSizeByFactor(0.5);
         }
 
 
