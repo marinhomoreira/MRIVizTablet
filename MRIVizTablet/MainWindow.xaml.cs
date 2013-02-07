@@ -53,6 +53,11 @@ namespace MRIVizTablet
             this._connection.SendMessage(new Message("ae"));
         }
 
+        private void sendPauseMsg()
+        {
+            this._connection.SendMessage(new Message("changeStateApp"));
+        }
+
         void OnConnected(object sender, ConnectionEventArgs e)
         {
             this._connection.MessageReceived += new ConnectionMessageEventHandler(OnMessageReceived);
@@ -112,9 +117,7 @@ namespace MRIVizTablet
                 this.Dispatcher.Invoke(new Action(delegate()
                 {
                     image.Source = new BitmapImage(new Uri(imgUri, UriKind.Relative));
-                    double[] c = processCoordinates(x, y);
-                    //image.SetValue(Canvas.LeftProperty, c[0]);
-                    //image.SetValue(Canvas.TopProperty, c[1]);
+                    double[] c = processCoordinates(x, y); 
                     scroll.ScrollToHorizontalOffset(c[0]);
                     scroll.ScrollToVerticalOffset(c[1]);
                 }));
@@ -146,6 +149,7 @@ namespace MRIVizTablet
             {
                 appStatus.Text = this.paused.ToString();
             }));
+            sendPauseMsg();
         }
 
         #endregion
